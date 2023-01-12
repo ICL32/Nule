@@ -7,12 +7,10 @@ namespace Assets.Nule.Scripts
     {
         //Network ID is the Scene Object ID assigned by the host
         private int _networkID;
+
         //Object ID is the GUID in the Scene
         private int _objectID;
 
-        void Awake
-        {
-            
-        }
+        
     }
 }
