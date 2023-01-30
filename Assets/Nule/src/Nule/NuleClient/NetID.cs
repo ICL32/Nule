@@ -1,16 +1,16 @@
-﻿using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Assets.Nule.Scripts
+namespace Nule.NuleClient
 {
     public class NetID : MonoBehaviour
     {
         //Network ID is the Scene Object ID assigned by the host
-        private int _networkID;
+        private int _networkId;
 
         //Object ID is the GUID in the Scene
-        private int _objectID;
-
+        private int _objectId;
         
+        
+    
     }
 }
