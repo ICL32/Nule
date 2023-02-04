@@ -7,7 +7,7 @@ namespace Assets.Nule.test
     {
 
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             var monobehaviourTypes = UnityEditor.TypeCache.GetTypesDerivedFrom<MonoBehaviour>();
         
@@ -21,7 +21,7 @@ namespace Assets.Nule.test
 
         }
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
 
         }

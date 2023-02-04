@@ -2,15 +2,12 @@
 
 namespace Nule.NuleClient
 {
-    public class NetID : MonoBehaviour
+    public struct NetID
     {
         //Network ID is the Scene Object ID assigned by the host
-        private int _networkId;
-
+        private uint _networkId;
         //Object ID is the GUID in the Scene
-        private int _objectId;
+        private uint _objectId;
         
-        
-    
     }
 }

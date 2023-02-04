@@ -6,7 +6,9 @@ namespace Nule
     {
         [SerializeField] 
         private bool _runInBackground;
-        public enum Mode
+        private Mode _state;
+        
+        private enum Mode
         {
             Offline,
             Hosting,
@@ -15,7 +17,7 @@ namespace Nule
 
         public static NetworkManager Instance { get; internal set; }
 
-        void Awake()
+        private void Awake()
         {
             SingletonInitialize();
             Application.runInBackground = _runInBackground;
@@ -23,7 +25,7 @@ namespace Nule
     
     
         /// <summary>This method is responsible for checking there is only one instance of NetworkManager at a time</summary>
-        public bool SingletonInitialize()
+        private bool SingletonInitialize()
         {
             if (Instance != null)
             {
@@ -34,6 +36,7 @@ namespace Nule
 
                 if (Instance != this)
                 {
+                    Debug.LogWarning("Duplicate Network Manager component found and will be destroyed", gameObject);
                     Destroy(this);
                     return false;
                 }

@@ -10,7 +10,7 @@ namespace Nule.NetStream
    /// </summary>
    public static class Serializer
    {
-      static Span<byte> TrySerialize<T>(ref T type)
+      private static Span<byte> TrySerialize<T>(ref T type)
          where T : unmanaged
       {
          int size = Marshal.SizeOf<T>(type);

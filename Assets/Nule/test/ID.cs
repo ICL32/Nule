@@ -6,14 +6,14 @@ namespace Assets.Nule.test
     {
         private GameObject _currentInstance;
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
-            _currentInstance = this.gameObject;
-            Debug.Log(_currentInstance.GetInstanceID());
+            _currentInstance = gameObject;
+            Debug.Log(_currentInstance.GetInstanceID(), gameObject);
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
         
         }
