@@ -10,24 +10,25 @@ namespace Nule.NetStream
    /// </summary>
    public static class Serializer
    {
-      private static Span<byte> TrySerialize<T>(ref T type)
+      /// <summary>
+      /// Trys to serialize an unmanaged types.
+      /// Returns false if null, returns true otherwise.
+      /// </summary>
+      public static bool TrySerialize<T>(ref this T? type, Span<byte> destination)
          where T : unmanaged
       {
-         int size = Marshal.SizeOf<T>(type);
-         byte[] tempBuffer = ArrayPool<byte>.Shared.Rent(size);
-         unsafe
+         if (!type.HasValue)
          {
-            fixed (void* tempPointer = &type)
-            {
-               fixed (byte* bufferPointer = tempBuffer)
-                  if(UnsafeUtility.IsBlittable(typeof(T)))
-                  {
-                     UnsafeUtility.MemCpy(bufferPointer, tempPointer, size);
-                  }  
-               
-            }
+            return false;
          }
-         return tempBuffer;
+         
+         T value = type.Value;
+         return MemoryMarshal.TryWrite(destination, ref value);
+      }
+      public static bool TrySerialize<T>(ref this T type, Span<byte> destination)
+         where T : unmanaged
+      {
+         return MemoryMarshal.TryWrite(destination, ref type);
       }
    }
 }

@@ -5,7 +5,7 @@ namespace Nule.NuleClient
 {
     public abstract class Client : MonoBehaviour
     {
-        private NetID _clientNetID;
+        private NetId _clientNetId;
         // Start is called before the first frame update
         private void Start()
         {

@@ -5,16 +5,8 @@ namespace Nule
     public class NetworkManager : MonoBehaviour
     {
         [SerializeField] 
-        private bool _runInBackground;
-        private Mode _state;
-        
-        private enum Mode
-        {
-            Offline,
-            Hosting,
-            Connected
-        };
-
+        private bool _runInBackground = true;
+      
         public static NetworkManager Instance { get; internal set; }
 
         private void Awake()

@@ -4,11 +4,12 @@ namespace Assets.Nule.test
 {
     public class ID : MonoBehaviour
     {
-        private GameObject _currentInstance;
+        private static uint _ids;
+        
         // Start is called before the first frame update
         private void Start()
         {
-            _currentInstance = gameObject;
+            GameObject _currentInstance = gameObject;
             Debug.Log(_currentInstance.GetInstanceID(), gameObject);
         }
 

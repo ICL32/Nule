@@ -1,4 +1,5 @@
 using System;
+using Nule;
 using UnityEngine;
 
 namespace Assets.Nule.test
@@ -9,7 +10,7 @@ namespace Assets.Nule.test
         // Start is called before the first frame update
         private void Start()
         {
-            var monobehaviourTypes = UnityEditor.TypeCache.GetTypesDerivedFrom<MonoBehaviour>();
+            var monobehaviourTypes = UnityEditor.TypeCache.GetTypesDerivedFrom<NetworkBehaviour>();
         
             foreach(Type type in monobehaviourTypes)
             {

@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15aeaa03d24c4394cb37510ffad35b7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _runInBackground: 0
+  _runInBackground: 1
 --- !u!4 &323029750
 Transform:
   m_ObjectHideFlags: 0
@@ -265,6 +265,9 @@ GameObject:
   - component: {fileID: 806219963}
   - component: {fileID: 806219962}
   - component: {fileID: 806219961}
+  - component: {fileID: 806219966}
+  - component: {fileID: 806219968}
+  - component: {fileID: 806219967}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -362,6 +365,42 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &806219966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806219960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e4c2032c93f56e40bde63d09524f4b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &806219967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806219960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36c73b182f3ed20418f1e8898a364f51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &806219968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806219960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36c73b182f3ed20418f1e8898a364f51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1744806163
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,7 +621,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2137626219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654,4 +693,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15aeaa03d24c4394cb37510ffad35b7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _runInBackground: 0
+  _runInBackground: 1

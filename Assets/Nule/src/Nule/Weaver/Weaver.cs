@@ -1,23 +1,29 @@
 using System;
+using System.Reflection;
+using System.Threading.Tasks;
 using UnityEditor;
-using UnityEngine;
 
 namespace Nule.Weaver
 {
-   internal partial class Weaver : MonoBehaviour
+   internal static partial class Weaver
    {
-      private TypeCache.TypeCollection _monoBehaviourTypes = UnityEditor.TypeCache.GetTypesDerivedFrom<MonoBehaviour>();
+      private static TypeCache.TypeCollection _networkBehaviourTypes = UnityEditor.TypeCache.GetTypesDerivedFrom<NetworkBehaviour>();
 
       //WeaveLoop handles going through types
-      private void WeaveLoop()
+      private static void MainLoop()
       {
-         foreach (Type type in _monoBehaviourTypes)
+         foreach (Type type in _networkBehaviourTypes)
          {
             if (type.Assembly.FullName == "Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null")
             {
-               Debug.Log(type.FullName);
+               foreach (MethodInfo method in type.GetMethods())
+               {
+                  var methodName = method.Name;
+                  method.GetCustomAttributes()
+               }
             }
          }
+         
       }
 
    }
