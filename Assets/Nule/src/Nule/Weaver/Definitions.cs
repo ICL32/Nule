@@ -10,6 +10,7 @@ namespace Nule.Weaver
     {
         public static Assembly CsAssembly => Assembly.GetExecutingAssembly();
         public static Type RpcAttribute => typeof(RpcAttribute);
+        public static Type NetworkBehaviour => typeof(NetworkBehaviour);
         
         public static Dictionary<string, MethodDefinition> RpcMethodsDefinitions { get; internal set; } = new();
         public static Dictionary<int, NetworkBehaviour> NetworkObjectInstances { get; internal set; } = new();
