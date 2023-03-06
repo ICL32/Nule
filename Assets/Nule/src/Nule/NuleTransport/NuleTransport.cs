@@ -19,7 +19,7 @@ namespace Nule.NuleTransport
             throw new System.NotImplementedException();
         }
 
-        public override bool Disconnect()
+        public override void Disconnect()
         {
             throw new System.NotImplementedException();
         }

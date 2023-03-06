@@ -6,11 +6,15 @@ namespace Assets.Nule.test
 {
     public class NetworkBehaviourTest : NetworkBehaviour
     {
-        [Rpc]
         private void Start()
         {
-            Debug.Log(InstanceId, this.gameObject);
-            Debug.Log(InstanceId, this.gameObject);
+            TestGenerate();
+        }
+
+        [Rpc]
+        private void TestGenerate()
+        {
+            Debug.Log("Method is called");
         }
     }
 }

@@ -1,4 +1,2 @@
 
-{csharpsquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(ýªÎçüÿÿÿÿ8›¤úëê0
-Vcsharpsquid:S1481"-Remove the unused local variable 'userTypes'.(Õèçýúÿÿÿÿ8³Ñêíê0
-]csharpsquid:S1135"4Complete the task associated to this 'TODO' comment.(ù’²öþÿÿÿÿ8žÁ¦îê0
+`csharpsquid:S3267'"CLoop should be simplified by calling Select(type => type.BaseType))(û×´÷

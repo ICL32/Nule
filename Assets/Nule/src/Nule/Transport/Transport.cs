@@ -13,6 +13,6 @@ namespace Nule.Transport
         public abstract bool TryConnect();
         public abstract bool TrySend();
         public abstract bool TryReceiveRpc();
-        public abstract bool Disconnect();
+        public abstract void Disconnect();
     }
 }
