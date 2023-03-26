@@ -521,6 +521,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1845417785}
   - component: {fileID: 1845417786}
+  - component: {fileID: 1845417787}
+  - component: {fileID: 1845417788}
   m_Layer: 0
   m_Name: Rpc Test
   m_TagString: Untagged
@@ -555,6 +557,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36c73b182f3ed20418f1e8898a364f51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1845417787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1845417784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbb66bc2bc8df654097a7cf1a9a20597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MyString: 
+--- !u!114 &1845417788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1845417784}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b853edabe7001e64898cb01678ae9e81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MyString: 
 --- !u!1 &1924368167
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,7 +2,7 @@ using System;
 using Nule;
 using UnityEngine;
 
-namespace Assets.Nule.test
+namespace Nule.test
 {
     public class ExecutingAsmName : MonoBehaviour
     {

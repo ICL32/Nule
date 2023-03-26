@@ -1,4 +1,3 @@
-using Assets.Nule.test;
 using UnityEngine;
 
 namespace Nule.NuleClient

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Assets.Nule.test
+namespace Nule.test
 {
     public class ID : MonoBehaviour
     {
