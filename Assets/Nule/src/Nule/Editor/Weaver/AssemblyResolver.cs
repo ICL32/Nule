@@ -29,9 +29,7 @@ namespace Nule.Weaver
             {
                 Path.Combine(editorPath, "Data/Managed/UnityEngine.dll"),
                 Path.Combine(editorPath, "Data/Managed/UnityEngine.CoreModule.dll"),
-                Path.Combine(editorPath, "Data/Managed/Assembly-CSharp.dll"),
-                Path.Combine(Application.dataPath, "../Library/ScriptAssemblies/Assembly-CSharp.dll"),
-                @"D:\Unity\Projects\NULE-T\Library\ScriptAssemblies\Assembly-CSharp.dll"
+                Path.Combine(editorPath, "Data/Managed/Assembly-CSharp.dll")
             };
 
             // Add the search directories for the UnityEngine assemblies

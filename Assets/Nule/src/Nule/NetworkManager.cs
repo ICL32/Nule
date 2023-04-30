@@ -1,3 +1,4 @@
+using System.Net;
 using UnityEngine;
 
 namespace Nule
@@ -6,9 +7,19 @@ namespace Nule
     {
         [SerializeField] 
         private bool _runInBackground = true;
+        [SerializeField] 
+        private int _serverPort;
+        [SerializeField]
+        private string _ipAddress;
+        
+        private NuleTransport.NuleTransport transport;
       
-        public static NetworkManager Instance { get; internal set; }
+        public static NetworkManager Instance { get; private set; }
 
+        public NetworkManager()
+        {
+            
+        }
         private void Awake()
         {
             SingletonInitialize();
@@ -37,5 +48,16 @@ namespace Nule
             Instance = this;
             return true;
         }
+        
+        //Event that gets called when a User Connects
+        public void OnConnect()
+        {
+        }
+  
+        //Event that gets called when a User Leaves
+        public void OnDisconnect()
+        {
+        }
+
     }
 }

@@ -5,7 +5,7 @@ using Mono.Cecil.Cil;
 using Nule.Weaver;
 using Unity.CompilationPipeline.Common.ILPostProcessing;
 
-public class WeaveIlPostProcessor : ILPostProcessor
+public class WeaveILPostProcessor : ILPostProcessor
 {
     
 
@@ -18,8 +18,8 @@ public class WeaveIlPostProcessor : ILPostProcessor
 
     public override ILPostProcessResult Process(ICompiledAssembly compiledAssembly)
     {
-        WeaveDebugger.ClearLogFile();
-        WeaveDebugger.Log("Weave");
+        WeaveDebugger.Log("-------------------------------------------------------------------");
+        WeaveDebugger.Log("WeaveIlPostProcessor: Weaving Begun");
 
         byte[] peData = compiledAssembly.InMemoryAssembly.PeData.ToArray();
         byte[] pdbData = compiledAssembly.InMemoryAssembly.PdbData.ToArray();
@@ -58,47 +58,9 @@ public class WeaveIlPostProcessor : ILPostProcessor
                 WeaveDebugger.Log("Failed to get main module definition.");
                 return null;
             }
-
-            var codeGenTestType = moduleDefinition.Types.FirstOrDefault(t => t.Name == "CodeGenTest");
-            if (codeGenTestType == null)
-            {
-                WeaveDebugger.Log("Failed to find CodeGenTest type.");
-                return null;
-            }
-
-            var cheeseCallerMethod =
-                new MethodDefinition("CallCheese", MethodAttributes.Public, moduleDefinition.TypeSystem.Void);
-            codeGenTestType.Methods.Add(cheeseCallerMethod);
-
-            var loggerType = moduleDefinition.Types.FirstOrDefault(t => t.Name == "Logger");
-            if (loggerType == null)
-            {
-                WeaveDebugger.Log("Failed to find Logger type.");
-                return null;
-            }
-
-            var cheeseMethod = loggerType.Methods.FirstOrDefault(m => m.Name == "Cheese");
-            if (cheeseMethod == null)
-            {
-                WeaveDebugger.Log("Failed to find Logger.Cheese method.");
-                return null;
-            }
-
-            var cheeseCallerIlProcessor = cheeseCallerMethod.Body.GetILProcessor();
-            cheeseCallerIlProcessor.Append(cheeseCallerIlProcessor.Create(OpCodes.Call,
-                moduleDefinition.ImportReference(cheeseMethod)));
-            cheeseCallerIlProcessor.Append(cheeseCallerIlProcessor.Create(OpCodes.Ret));
-
-            var startMethod = codeGenTestType.Methods.FirstOrDefault(m => m.Name == "Start");
-            if (startMethod != null)
-            {
-                var processor = startMethod.Body.GetILProcessor();
-                var firstInstruction = startMethod.Body.Instructions.First();
-                processor.InsertBefore(firstInstruction,
-                    processor.Create(OpCodes.Ldarg_0)); // Load the instance of CodeGenTest
-                processor.InsertAfter(firstInstruction, processor.Create(OpCodes.Call, cheeseCallerMethod));
-            }
-
+            
+            Weaver.EntryPoint(moduleDefinition);
+            
             using (var outputStream = new MemoryStream())
             using (var outputPdbStream = new MemoryStream())
             {
@@ -107,6 +69,9 @@ public class WeaveIlPostProcessor : ILPostProcessor
                     WriteSymbols = false,
                     SymbolStream = outputPdbStream
                 };
+                assemblyDefinition.Write("WeaverDebug");
+                
+                //Write to in memory assembly
                 assemblyDefinition.Write(outputStream, writerParameters);
 
                 return new ILPostProcessResult(new InMemoryAssembly(outputStream.ToArray(),

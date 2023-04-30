@@ -1,12 +1,20 @@
-﻿using Nule.Transport;
+﻿using System.Net;
+using Nule.Transport;
 
 namespace Nule.NuleTransport
 {
     public class NuleTransport : Transport.Transport
     {
-        public override bool TryConnect()
+        public override bool TryConnectAsync()
         {
-            throw new System.NotImplementedException();
+            if (State != NetworkStates.Offline)
+            {
+                return false;
+            }
+            ServerIp = IPAddress.Parse(IpAddress);
+            EndPoint = new IPEndPoint(ServerIp, ServerPort);
+
+            return false;
         }
 
         public override bool TrySend()
@@ -14,12 +22,17 @@ namespace Nule.NuleTransport
             throw new System.NotImplementedException();
         }
 
-        public override bool TryReceiveRpc()
+        public override void StartHosting()
         {
             throw new System.NotImplementedException();
         }
 
-        public override void Disconnect()
+        public override void StopHosting()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void RecieveAsync()
         {
             throw new System.NotImplementedException();
         }

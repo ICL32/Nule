@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using Nule;
-using Nule.Packet;
+﻿using Nule;
+using Nule.Weaver.Attributes;
+using UnityEngine;
 using UnityEditor;
 
 [InitializeOnLoad]

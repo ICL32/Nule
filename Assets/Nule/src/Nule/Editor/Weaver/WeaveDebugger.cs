@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace Nule.Weaver
 {
-    //We can't use Debug.Log to debug since it's a native method within Unity
-    //To debug we will generate a txt file that contains error logs
+    //We can't use Unity methods while modifying assemblies
+    //To debug we will generate a txt file that contains error logs instead of using Debug.Log
     public static class WeaveDebugger
     {
         private const string LogFilePath = "log.txt";
