@@ -1,40 +1,163 @@
-﻿using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 using Nule.Transport;
+using UnityEngine;
 
 namespace Nule.NuleTransport
 {
     public class NuleTransport : Transport.Transport
     {
-        public override bool TryConnectAsync()
+        private List<TcpClient> ActiveClients = new List<TcpClient>(100);
+        public NuleTransport(IPAddress address, int port) : base(address, port)
+        {
+        }
+
+        public override async Task<bool> TryConnectAsync()
         {
             if (State != NetworkStates.Offline)
             {
                 return false;
             }
-            ServerIp = IPAddress.Parse(IpAddress);
-            EndPoint = new IPEndPoint(ServerIp, ServerPort);
 
-            return false;
+            try
+            {
+                Client = new TcpClient();
+                await Client.ConnectAsync(ServerAddress, ServerPort);
+                State = NetworkStates.Connected;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public override bool TrySend()
+        public override async Task<bool> TrySend(byte[] data)
         {
-            throw new System.NotImplementedException();
+            //Network is not connected
+            if (State == NetworkStates.Offline)
+            {
+                return false;
+            }
+            //Check if Network State is a Client
+            if (State == NetworkStates.Connected)
+            {
+                if (Client == null || !Client.Connected)
+                {
+                    return false;
+                }
+
+                NetworkStream stream = Client.GetStream();
+                if (stream == null || !stream.CanWrite)
+                {
+                    return false;
+                }
+
+                await stream.WriteAsync(data, 0, data.Length);
+                return true;
+            }
+            
+            //Check if Network State is a Server
+            if (State == NetworkStates.Hosting)
+            {
+                bool allSentSuccessfully = true;
+
+                foreach (TcpClient client in ActiveClients)
+                {
+                    if (client != null && client.Connected)
+                    {
+                        NetworkStream stream = client.GetStream();
+                        //Stream couldn't be written to
+                        if (stream.CanWrite)
+                        {
+                            await stream.WriteAsync(data, 0, data.Length);
+                        }
+                        else
+                        {
+                            allSentSuccessfully = false;
+                        }
+                    }
+                }
+            }
+
+            return true;
         }
 
-        public override void StartHosting()
+        public override bool StartHosting()
         {
-            throw new System.NotImplementedException();
+            if (State != NetworkStates.Offline)
+            {
+                return false;
+            }
+
+            try
+            {
+                Server = new TcpListener(ServerAddress, ServerPort);
+                Server.Start();
+                State = NetworkStates.Hosting;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public override void StopHosting()
+        public override bool StopHosting()
         {
-            throw new System.NotImplementedException();
+            if (State != NetworkStates.Hosting)
+            {
+                return false;
+            }
+
+            Server.Stop();
+            State = NetworkStates.Offline;
+            return true;
         }
 
-        public override void RecieveAsync()
+        public override async Task<byte[]> RecieveAsync()
         {
-            throw new System.NotImplementedException();
+            if (Client == null || !Client.Connected)
+            {
+                return null;
+            }
+
+            try
+            {
+                NetworkStream stream = Client.GetStream();
+                byte[] buffer = new byte[1024];
+                int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+                Array.Resize(ref buffer, bytesRead);
+                return buffer;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        
+        public override async Task ListenForConnectionsAsync()
+        {
+            if (State != NetworkStates.Hosting)
+            {
+                throw new InvalidOperationException("Server is not hosting.");
+            }
+
+            while (KeepListening)
+            {
+                try
+                {
+                    TcpClient newClient = await Server.AcceptTcpClientAsync();
+                    // Do something with the new client, e.g. add to a list of clients
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Error accepting new client: {ex.Message}");
+                }
+            }
         }
     }
 }

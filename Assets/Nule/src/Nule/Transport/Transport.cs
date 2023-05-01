@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using Nule.NuleClient;
 using UnityEngine;
 
@@ -8,26 +9,32 @@ namespace Nule.Transport
 {
     public abstract class Transport
     {
-        protected string IpAddress { get;  set;}
-        protected int ServerPort { get;  set;}
-
-        protected IPAddress ServerIp { get; set;}
-        protected IPEndPoint EndPoint { get; set;}
+        protected IPAddress ServerAddress { get;}
         
-        protected TcpClient TcpClient { get; set; }
+        protected int ServerPort { get;}
+
+        protected TcpClient Client { get; set; }
+
+        protected TcpListener Server { get; set; }
         
-        protected TcpListener TcpListener { get; set; }
+        public bool KeepListening { get; set; } = true;
+        
 
-        public NetworkStates State { get; set;} = NetworkStates.Offline;
-        public event Action<int> ClientConnected;
-        public event Action<int> ClientDisconnected;
+        public NetworkStates State { get; set; } = NetworkStates.Offline;
+        
 
-        public abstract bool TryConnectAsync();
-        public abstract bool TrySend();
-        public abstract void StartHosting();
-        public abstract void StopHosting();
-        public abstract void RecieveAsync();
-        public delegate void OnDisconnect();
-        public delegate void OnConnected();
+        public Transport(IPAddress address, int port)
+        {
+            ServerAddress = address;
+            ServerPort = port;
+        }
+
+        public abstract bool StartHosting();
+        public abstract bool StopHosting();
+        public abstract Task<bool> TryConnectAsync();
+        public abstract Task<bool> TrySend(byte[] data);
+        public abstract Task<byte[]> RecieveAsync();
+        public abstract Task ListenForConnectionsAsync();
+        
     }
 }
