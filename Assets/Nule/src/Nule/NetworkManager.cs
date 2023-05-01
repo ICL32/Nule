@@ -13,13 +13,13 @@ namespace Nule
         [SerializeField] private int _serverPort;
         [SerializeField] private string _ipAddress;
 
-        private NuleTransport.NuleTransport transport;
-        private static NetworkManager Instance;
+        public NuleTransport.NuleTransport Transport { get; private set; }
+        private static NetworkManager _instance;
         
         public NetworkManager()
         {
             IPAddress address = IPAddress.Parse(_ipAddress);
-            transport = new NuleTransport.NuleTransport(address, _serverPort);
+            Transport = new NuleTransport.NuleTransport(address, _serverPort);
         }
 
         private void Awake()
@@ -32,14 +32,14 @@ namespace Nule
         /// <summary>This method is responsible for checking there is only one instance of NetworkManager at a time</summary>
         private bool SingletonInitialize()
         {
-            if (Instance != null)
+            if (_instance != null)
             {
-                if (Instance == this)
+                if (_instance == this)
                 {
                     return true;
                 }
 
-                if (Instance != this)
+                if (_instance != this)
                 {
                     Debug.LogWarning("Duplicate Network Manager component found and will be destroyed", gameObject);
                     Destroy(this);
@@ -48,7 +48,7 @@ namespace Nule
             }
 
             //If instance is null then assign this instance
-            Instance = this;
+            _instance = this;
             return true;
         }
     }

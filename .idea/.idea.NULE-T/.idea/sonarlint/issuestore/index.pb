@@ -11,7 +11,3 @@ N
 Assets/NetworkBehaviourTest.cs,c\6\c62979a0ab295790a764de6a52bb91da26b99613
 _
 /Assets/Nule/src/Nule/Attributes/RPCAttribute.cs,1\c\1c78663fa7210726e0dc517dfeee6629f1e9b9b3
-j
-:Assets/Nule/src/Nule/Editor/Weaver/WeaveILPostProcessor.cs,8\0\804e30f6c6fa61147f258cacb50fb3c794ab102d
-a
-1Assets/Nule/src/Nule/Editor/Weaver/Definitions.cs,5\b\5b5917a643c1d2679a6b6bb231b08a1a9fd1c912
