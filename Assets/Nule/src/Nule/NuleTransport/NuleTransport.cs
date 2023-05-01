@@ -45,13 +45,13 @@ namespace Nule.NuleTransport
             //Check if Network State is a Client
             if (State == NetworkStates.Connected)
             {
-                if (Client == null || !Client.Connected)
+                if (Client is not { Connected: true })
                 {
                     return false;
                 }
 
                 NetworkStream stream = Client.GetStream();
-                if (stream == null || !stream.CanWrite)
+                if (!stream.CanWrite)
                 {
                     return false;
                 }
@@ -60,8 +60,8 @@ namespace Nule.NuleTransport
                 return true;
             }
             
-            //Check if Network State is a Server
-            if (State == NetworkStates.Hosting)
+            //Check if Network State is a Server and if there are Players to send to
+            if (State == NetworkStates.Hosting && ActiveClients.Count != 0)
             {
                 bool allSentSuccessfully = true;
 
