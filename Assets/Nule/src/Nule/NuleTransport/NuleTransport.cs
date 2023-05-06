@@ -11,8 +11,11 @@ namespace Nule.NuleTransport
     public class NuleTransport : Transport.Transport
     {
         private List<TcpClient> ActiveClients = new List<TcpClient>(100);
-        public NuleTransport(IPAddress address, int port) : base(address, port)
+        
+        public NuleTransport(IPAddress address, int port)
         {
+            base.ServerAddress = address;
+            base.ServerPort = port;
         }
 
         public override async Task<bool> TryConnectAsync()
@@ -86,7 +89,7 @@ namespace Nule.NuleTransport
             return true;
         }
 
-        public override bool StartHosting()
+        public override bool TryStartHosting()
         {
             if (State != NetworkStates.Offline)
             {
@@ -106,7 +109,7 @@ namespace Nule.NuleTransport
             }
         }
 
-        public override bool StopHosting()
+        public override bool TryStopHosting()
         {
             if (State != NetworkStates.Hosting)
             {
@@ -118,9 +121,9 @@ namespace Nule.NuleTransport
             return true;
         }
 
-        public override async Task<byte[]> RecieveAsync()
+        public override async Task<byte[]> ReceiveAsync()
         {
-            if (Client == null || !Client.Connected)
+            if (Client is not { Connected: true })
             {
                 return null;
             }
@@ -159,5 +162,6 @@ namespace Nule.NuleTransport
                 }
             }
         }
+        
     }
 }

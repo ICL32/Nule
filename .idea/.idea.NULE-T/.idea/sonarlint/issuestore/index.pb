@@ -11,3 +11,17 @@ N
 Assets/NetworkBehaviourTest.cs,c\6\c62979a0ab295790a764de6a52bb91da26b99613
 _
 /Assets/Nule/src/Nule/Attributes/RPCAttribute.cs,1\c\1c78663fa7210726e0dc517dfeee6629f1e9b9b3
+\
+,Assets/Nule/src/Nule/Editor/Weaver/Weaver.cs,7\3\73ccff5bd344e9cb1ad34bd5bf752b2efde65c17
+X
+(Assets/Nule/src/Nule/Packet/RpcPacket.cs,f\f\ff6dbf19bac026d1287ed48642b94468744e391b
+X
+(Assets/Nule/src/Nule/NuleClient/NetId.cs,7\8\78f5ff85a0a24e7d35bc230b806a835a97db3dac
+\
+,Assets/Nule/src/Nule/NetStream/Serializer.cs,9\9\990de6cdf33598c1c414453a67fe0f32df1d085c
+a
+1Assets/Nule/src/Nule/Editor/Weaver/Definitions.cs,5\b\5b5917a643c1d2679a6b6bb231b08a1a9fd1c912
+e
+5Assets/Nule/src/Nule/NetStream/NetworkStreamWriter.cs,7\2\723764bf7b1f05f7f669726f0938986e49c0ad83
+j
+:Assets/Nule/src/Nule/Editor/Weaver/WeaveILPostProcessor.cs,8\0\804e30f6c6fa61147f258cacb50fb3c794ab102d

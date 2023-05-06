@@ -9,9 +9,9 @@ namespace Nule.Transport
 {
     public abstract class Transport
     {
-        protected IPAddress ServerAddress { get;}
+        protected IPAddress ServerAddress { get; set; }
         
-        protected int ServerPort { get;}
+        protected int ServerPort { get;  set; }
 
         protected TcpClient Client { get; set; }
 
@@ -22,18 +22,14 @@ namespace Nule.Transport
 
         public NetworkStates State { get; set; } = NetworkStates.Offline;
         
+        
+        
 
-        public Transport(IPAddress address, int port)
-        {
-            ServerAddress = address;
-            ServerPort = port;
-        }
-
-        public abstract bool StartHosting();
-        public abstract bool StopHosting();
+        public abstract bool TryStartHosting();
+        public abstract bool TryStopHosting();
         public abstract Task<bool> TryConnectAsync();
         public abstract Task<bool> TrySend(byte[] data);
-        public abstract Task<byte[]> RecieveAsync();
+        public abstract Task<byte[]> ReceiveAsync();
         public abstract Task ListenForConnectionsAsync();
         
     }
