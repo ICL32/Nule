@@ -14,8 +14,8 @@ namespace Nule.NuleTransport
         
         public NuleTransport(IPAddress address, int port)
         {
-            base.ServerAddress = address;
-            base.ServerPort = port;
+            ServerAddress = address;
+            ServerPort = port;
         }
 
         public override async Task<bool> TryConnectAsync()

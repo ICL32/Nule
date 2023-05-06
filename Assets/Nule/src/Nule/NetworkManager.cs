@@ -11,7 +11,7 @@ namespace Nule
         
         [SerializeField] private bool _runInBackground = true;
         [SerializeField] private int _serverPort;
-        [SerializeField] private string _ipAddress = "127.0.0.1";
+        [SerializeField] private string _ipAddress;
 
         public Transport.Transport Transport { get; private set; }
         private static NetworkManager _instance;
@@ -25,7 +25,11 @@ namespace Nule
             {
                 return;
             }
-            
+
+            if (_ipAddress.Length == 0)
+            {
+                _ipAddress = "127.0.0.1";
+            }
             IPAddress address = IPAddress.Parse(_ipAddress);
             Transport = new NuleTransport.NuleTransport(address, _serverPort);
             Debug.Log($"Creating TCP Client on: {address}:{_serverPort}");
