@@ -1,0 +1,5 @@
+
+vcsharpsquid:S3776)"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(Ñ“”¡8Î™ö¾ý0
+pcsharpsquid:S1854S"GRemove this useless assignment to local variable 'allSentSuccessfully'.(•ÁðÝûÿÿÿÿ8ù¹ªÅý0
+Dcsharpsquid:S2933" Make 'ActiveClients' 'readonly'.(Œý½ª8ó‹è¾ý0
+Wcsharpsquid:S1481œ"-Remove the unused local variable 'newClient'.(ì‰…ýÿÿÿÿÿ8ÅºÛ¾ý0

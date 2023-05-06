@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &323029749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,7 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15aeaa03d24c4394cb37510ffad35b7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _runInBackground: 1
+  _runInBackground: 0
+  _serverPort: 565
+  _ipAddress: 127.0.0.1
 --- !u!4 &323029750
 Transform:
   m_ObjectHideFlags: 0
@@ -569,7 +571,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbb66bc2bc8df654097a7cf1a9a20597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MyString: 
 --- !u!114 &1845417788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -582,7 +583,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b853edabe7001e64898cb01678ae9e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MyString: 
 --- !u!1 &1924368167
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,7 +737,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2139279971
 Transform:
   m_ObjectHideFlags: 0
@@ -766,3 +766,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _runInBackground: 1
+  _serverPort: 0
+  _ipAddress: 
