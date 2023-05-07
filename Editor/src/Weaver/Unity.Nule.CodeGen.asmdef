@@ -3,14 +3,15 @@
     "rootNamespace": "Nule.Weaver",
     "references": [
         "GUID:de52dddd19ae83149a4aea36f92d03d1",
-        "GUID:df791bc4a81b9404f8caeef8fb699669",
-        "GUID:aaf6804a66b394e9b8c133f80fc0c3e3"
+        "GUID:df791bc4a81b9404f8caeef8fb699669"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,
-    "overrideReferences": false,
-    "precompiledReferences": [],
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Mono.Cecil.dll"
+    ],
     "autoReferenced": false,
     "defineConstraints": [],
     "versionDefines": [],

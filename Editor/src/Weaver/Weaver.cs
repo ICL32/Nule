@@ -2,7 +2,6 @@ using System.IO;
 using System.Reflection;
 using Mono.Cecil;
 using Mono.Collections.Generic;
-using PlasticGui;
 using UnityEngine;
 
 namespace Nule.Weaver
