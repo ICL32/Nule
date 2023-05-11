@@ -1,13 +1,12 @@
 ﻿using System.IO;
 using System.Linq;
 using Mono.Cecil;
-using Mono.Cecil.Cil;
 using Nule.Weaver;
 using Unity.CompilationPipeline.Common.ILPostProcessing;
 
 public class WeaveILPostProcessor : ILPostProcessor
 {
-    
+
 
     public override ILPostProcessor GetInstance() => this;
 
@@ -40,9 +39,10 @@ public class WeaveILPostProcessor : ILPostProcessor
 
             var readerParameters = new ReaderParameters
             {
-                ReadSymbols = false,
+                ReadWrite = true,
+                ReadSymbols = true,
                 SymbolStream = pdbStream,
-                AssemblyResolver = assemblyResolver
+                AssemblyResolver = assemblyResolver,
             };
 
             var assemblyDefinition = AssemblyDefinition.ReadAssembly(assemblyStream, readerParameters);
@@ -58,26 +58,25 @@ public class WeaveILPostProcessor : ILPostProcessor
                 WeaveDebugger.Log("Failed to get main module definition.");
                 return null;
             }
-            
+
             Weaver.EntryPoint(moduleDefinition);
-            
+
             using (var outputStream = new MemoryStream())
             using (var outputPdbStream = new MemoryStream())
             {
                 var writerParameters = new WriterParameters
                 {
                     WriteSymbols = false,
-                    SymbolStream = outputPdbStream
+                    SymbolStream = outputPdbStream,
                 };
                 assemblyDefinition.Write("WeaverDebug");
-                
+
                 //Write to in memory assembly
                 assemblyDefinition.Write(outputStream, writerParameters);
-
-                return new ILPostProcessResult(new InMemoryAssembly(outputStream.ToArray(),
-                    outputPdbStream.ToArray()));
+                InMemoryAssembly memoryAssembly = new InMemoryAssembly(outputStream.ToArray(),
+                    outputPdbStream.ToArray());
+                return new ILPostProcessResult(memoryAssembly);
             }
         }
     }
-
 }

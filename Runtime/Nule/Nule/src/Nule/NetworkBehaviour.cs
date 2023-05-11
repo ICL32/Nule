@@ -5,9 +5,9 @@ namespace Nule
     [HideInInspector]
     public class NetworkBehaviour : MonoBehaviour
     {
+        private static ulong _identifiers;
         public bool isServer { get; internal set; }
         public bool isLocalPlayer { get; internal set; }
-        private static ulong _identifiers;
         public ulong InstanceId { get; } = _identifiers++;
     }
 }

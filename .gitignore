@@ -38,3 +38,11 @@
 
 # Include meta files for assets, package and package's root
 !*.meta
+.idea/.idea.NULE-T.dir/.idea/sonarlint/issuestore/7/a/7a0c641c174a438303f3f4a00e5fc4b945445e19
+.idea/.idea.NULE-T.dir/.idea/sonarlint/issuestore/7/0/7030d0b2f71b999ff89a343de08c414af32fc93a
+.idea/.idea.NULE-T.dir/.idea/sonarlint/issuestore/8/0/80feb7f7ad5ae17e64682021486d775eb66c1e21
+.idea/.idea.NULE-T.dir/.idea/sonarlint/issuestore/9/4/9417a3f09af744065438ebf9fe7e2ebf1a20e373
+.idea/.idea.NULE-T.dir/.idea/sonarlint/issuestore/c/a/ca642a22686971b261b60de81d8ff554fdd91e2e
+*.pb
+*.pb
+.idea/.idea.NULE-T.dir/.idea/sonarlint/issuestore/index.pb
