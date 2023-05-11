@@ -32,13 +32,13 @@ namespace Nule.NuleTransport
                 State = NetworkStates.Connected;
                 return true;
             }
-            catch
+            catch (Exception e)
             {
                 return false;
             }
         }
 
-        public override async Task<bool> TrySend(byte[] data)
+        public override async Task<bool> TrySend(byte[] data, int length)
         {
             //Network is not connected
             if (State == NetworkStates.Offline)
@@ -59,7 +59,7 @@ namespace Nule.NuleTransport
                     return false;
                 }
 
-                await stream.WriteAsync(data, 0, data.Length);
+                await stream.WriteAsync(data, 0, length);
                 return true;
             }
             
@@ -84,9 +84,11 @@ namespace Nule.NuleTransport
                         }
                     }
                 }
+
+                return allSentSuccessfully;
             }
 
-            return true;
+            return false;
         }
 
         public override bool TryStartHosting()
@@ -118,6 +120,7 @@ namespace Nule.NuleTransport
 
             Server.Stop();
             State = NetworkStates.Offline;
+            Server = null;
             return true;
         }
 
@@ -131,16 +134,18 @@ namespace Nule.NuleTransport
             try
             {
                 NetworkStream stream = Client.GetStream();
-                byte[] buffer = new byte[1024];
-                int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
-                Array.Resize(ref buffer, bytesRead);
-                return buffer;
+                int bytesRead = await stream.ReadAsync(Buffer, 0, Buffer.Length);
+                byte[] result = new byte[bytesRead];
+                Array.Copy(Buffer, 0, result, 0, bytesRead);
+                return result;
             }
             catch
             {
+                // You might want to log exceptions here to know what's happening
                 return null;
             }
         }
+
         
         public override async Task ListenForConnectionsAsync()
         {
@@ -148,17 +153,21 @@ namespace Nule.NuleTransport
             {
                 throw new InvalidOperationException("Server is not hosting.");
             }
-
+            
+            TcpClient newClient = null;
+            
             while (KeepListening)
             {
                 try
                 {
-                    TcpClient newClient = await Server.AcceptTcpClientAsync();
-                    // Do something with the new client, e.g. add to a list of clients
+                    newClient = await Server.AcceptTcpClientAsync();
+                    ClientsList.Add(newClient);
+
                 }
                 catch (Exception ex)
                 {
                     Debug.LogError($"Error accepting new client: {ex.Message}");
+                    newClient?.Dispose();
                 }
             }
         }
