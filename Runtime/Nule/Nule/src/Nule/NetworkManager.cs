@@ -1,9 +1,11 @@
 using System;
 using System.Net;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Nule
 {
+    //Handles Game Logic with the transport
     public class NetworkManager : MonoBehaviour
     {
         public static event Action<int> OnConnected;
@@ -11,9 +13,8 @@ namespace Nule
         
         [SerializeField] private bool _runInBackground = true;
         [SerializeField] private int _serverPort;
-        [SerializeField] private string _ipAddress;
 
-        public Transport.Transport Transport { get; private set; }
+        private Transport.Transport _transport;
         private static NetworkManager _instance;
         
       
@@ -25,14 +26,9 @@ namespace Nule
             {
                 return;
             }
-
-            if (_ipAddress.Length == 0)
-            {
-                _ipAddress = "127.0.0.1";
-            }
-            IPAddress address = IPAddress.Parse(_ipAddress);
-            Transport = new NuleTransport.NuleTransport(address, _serverPort);
-            Debug.Log($"Creating TCP Client on: {address}:{_serverPort}");
+            
+            Debug.Log($"Creating TCP Client on port: :{_serverPort}");
+            DontDestroyOnLoad(gameObject);
             Application.runInBackground = _runInBackground;
         }
 
@@ -59,5 +55,21 @@ namespace Nule
             _instance = this;
             return true;
         }
+
+        public bool TryStartHosting()
+        {
+            return _transport.TryStartHosting();
+        }
+
+        public async Task<bool> TryConnectToServer(string ipAddress)
+        {
+            return await _transport.TryConnectAsync(IPAddress.Parse(ipAddress));
+        }
+
+        public Task TryStartListening()
+        {
+            return _transport.ListenForConnectionsAsync();
+        }
+
     }
 }

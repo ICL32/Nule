@@ -12,7 +12,7 @@ namespace Nule.Transport
     public abstract class Transport
     {
         protected byte[] Buffer { get; } = new byte[1024];
-        protected IPAddress ServerAddress { get; set; }
+        
         
         protected int ServerPort { get;  set; }
 
@@ -31,8 +31,9 @@ namespace Nule.Transport
 
         public abstract bool TryStartHosting();
         public abstract bool TryStopHosting();
-        public abstract Task<bool> TryConnectAsync();
-        public abstract Task<bool> TrySend(byte[] data, int length);
+        public abstract Task<bool> TryConnectAsync(IPAddress address);
+        public abstract Task<bool> TryServerSend(List<TcpClient> activeClients, byte[] buffer);
+        public abstract Task<bool> TryClientSend(byte[] buffer);
         public abstract Task<byte[]> ReceiveAsync();
         public abstract Task ListenForConnectionsAsync();
         

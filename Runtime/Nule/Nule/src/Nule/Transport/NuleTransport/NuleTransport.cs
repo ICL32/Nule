@@ -10,15 +10,12 @@ namespace Nule.NuleTransport
 {
     public class NuleTransport : Transport.Transport
     {
-        private List<TcpClient> ActiveClients = new List<TcpClient>(100);
-        
         public NuleTransport(IPAddress address, int port)
         {
-            ServerAddress = address;
-            ServerPort = port;
+
         }
 
-        public override async Task<bool> TryConnectAsync()
+        public override async Task<bool> TryConnectAsync(IPAddress address)
         {
             if (State != NetworkStates.Offline)
             {
@@ -28,7 +25,7 @@ namespace Nule.NuleTransport
             try
             {
                 Client = new TcpClient();
-                await Client.ConnectAsync(ServerAddress, ServerPort);
+                await Client.ConnectAsync(address, ServerPort);
                 State = NetworkStates.Connected;
                 return true;
             }
@@ -38,37 +35,34 @@ namespace Nule.NuleTransport
             }
         }
 
-        public override async Task<bool> TrySend(byte[] data, int length)
+        public override async Task<bool> TryClientSend(byte[] data)
         {
             //Network is not connected
-            if (State == NetworkStates.Offline)
+            if (State != NetworkStates.Connected)
             {
                 return false;
             }
-            //Check if Network State is a Client
-            if (State == NetworkStates.Connected)
+
+            NetworkStream stream = Client.GetStream();
+            if (!stream.CanWrite)
             {
-                if (Client is not { Connected: true })
-                {
-                    return false;
-                }
-
-                NetworkStream stream = Client.GetStream();
-                if (!stream.CanWrite)
-                {
-                    return false;
-                }
-
-                await stream.WriteAsync(data, 0, length);
-                return true;
+                return false;
             }
-            
-            //Check if Network State is a Server and if there are Players to send to
-            if (State == NetworkStates.Hosting && ActiveClients.Count != 0)
-            {
-                bool allSentSuccessfully = true;
 
-                foreach (TcpClient client in ActiveClients)
+            await stream.WriteAsync(data, 0, data.Length);
+            return true;
+        }
+
+        public override async Task<bool> TryServerSend(List<TcpClient> activeClients, byte[] buffer)
+        {
+            if (State != NetworkStates.Hosting || activeClients.Count == 0)
+            {
+                return false;
+            }
+
+            bool allSentSuccessfully = true;
+
+                foreach (TcpClient client in activeClients)
                 {
                     if (client != null && client.Connected)
                     {
@@ -76,7 +70,7 @@ namespace Nule.NuleTransport
                         //Stream couldn't be written to
                         if (stream.CanWrite)
                         {
-                            await stream.WriteAsync(data, 0, data.Length);
+                            await stream.WriteAsync(buffer, 0, buffer.Length);
                         }
                         else
                         {
@@ -86,9 +80,6 @@ namespace Nule.NuleTransport
                 }
 
                 return allSentSuccessfully;
-            }
-
-            return false;
         }
 
         public override bool TryStartHosting()
@@ -100,7 +91,7 @@ namespace Nule.NuleTransport
 
             try
             {
-                Server = new TcpListener(ServerAddress, ServerPort);
+                Server = new TcpListener(IPAddress.Parse("127.0.0.1"), ServerPort);
                 Server.Start();
                 State = NetworkStates.Hosting;
                 return true;
@@ -146,31 +137,27 @@ namespace Nule.NuleTransport
             }
         }
 
-        
+
         public override async Task ListenForConnectionsAsync()
         {
             if (State != NetworkStates.Hosting)
             {
                 throw new InvalidOperationException("Server is not hosting.");
             }
-            
-            TcpClient newClient = null;
-            
-            while (KeepListening)
-            {
-                try
-                {
-                    newClient = await Server.AcceptTcpClientAsync();
-                    ClientsList.Add(newClient);
 
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogError($"Error accepting new client: {ex.Message}");
-                    newClient?.Dispose();
-                }
+            TcpClient newClient = null;
+            try
+            {
+                newClient = await Server.AcceptTcpClientAsync();
+                ClientsList.Add(newClient);
+
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Error accepting new client: {ex.Message}");
+                newClient?.Dispose();
             }
         }
-        
     }
+
 }
