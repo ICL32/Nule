@@ -1,8 +1,9 @@
 namespace Nule.Packet
 { 
-    public enum PacketTypes : ushort
+    public enum PacketTypes : short
     {
         Transform,
-        Rpc
+        Rpc,
+        NetworkManagerId
     }
 }

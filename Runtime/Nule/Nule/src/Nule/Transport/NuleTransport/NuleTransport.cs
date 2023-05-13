@@ -10,9 +10,9 @@ namespace Nule.NuleTransport
 {
     public class NuleTransport : Transport.Transport
     {
-        public NuleTransport(IPAddress address, int port)
+        public NuleTransport(int port)
         {
-
+            ServerPort = port;
         }
 
         public override async Task<bool> TryConnectAsync(IPAddress address)
@@ -138,7 +138,7 @@ namespace Nule.NuleTransport
         }
 
 
-        public override async Task ListenForConnectionsAsync()
+        public override async Task<TcpClient> ListenForConnectionsAsync()
         {
             if (State != NetworkStates.Hosting)
             {
@@ -149,7 +149,7 @@ namespace Nule.NuleTransport
             try
             {
                 newClient = await Server.AcceptTcpClientAsync();
-                ClientsList.Add(newClient);
+                return newClient;
 
             }
             catch (Exception ex)
@@ -157,6 +157,8 @@ namespace Nule.NuleTransport
                 Debug.LogError($"Error accepting new client: {ex.Message}");
                 newClient?.Dispose();
             }
+
+            return null;
         }
     }
 

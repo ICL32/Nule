@@ -1,23 +1,36 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Nule
 {
     //Handles Game Logic with the transport
     public class NetworkManager : MonoBehaviour
     {
-        public static event Action<int> OnConnected;
-        public static event Action<int> OnDisconnected;
+        public static event Action<uint> OnConnected;
+        public static event Action<uint> OnDisconnected;
         
         [SerializeField] private bool _runInBackground = true;
         [SerializeField] private int _serverPort;
+        [SerializeField] private SceneAsset _scene;
+        [SerializeField] private GameObject _playerObject;
 
         private Transport.Transport _transport;
         private static NetworkManager _instance;
+
+        //This defines what ID
+        //ID 0 is for hosts
+        private uint _clientId;
+        //This is an incremental counter to assign IDs, starts from 1 because 0 is reserved for hosts
+        private uint _idCounter = 1;
         
-      
+        private List<NetworkBehaviour> _playerObjects;
+        private Dictionary<uint, TcpClient> _clientsList;
 
         private void Awake()
         {
@@ -26,7 +39,8 @@ namespace Nule
             {
                 return;
             }
-            
+
+            _transport = new NuleTransport.NuleTransport(_serverPort);
             Debug.Log($"Creating TCP Client on port: :{_serverPort}");
             DontDestroyOnLoad(gameObject);
             Application.runInBackground = _runInBackground;
@@ -58,7 +72,14 @@ namespace Nule
 
         public bool TryStartHosting()
         {
-            return _transport.TryStartHosting();
+            if (_transport.TryStartHosting())
+            {
+                _clientId = 0;
+                SceneManager.LoadScene(_scene.name);
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<bool> TryConnectToServer(string ipAddress)
@@ -66,9 +87,23 @@ namespace Nule
             return await _transport.TryConnectAsync(IPAddress.Parse(ipAddress));
         }
 
-        public Task TryStartListening()
+        public async Task TryStartListening()
         {
-            return _transport.ListenForConnectionsAsync();
+            TcpClient client = await _transport.ListenForConnectionsAsync();
+
+            if (client == null)
+            {
+                return;
+            }
+            
+            while (_clientsList.ContainsKey(_idCounter))
+            {
+                _idCounter++;
+            }
+            
+            _clientsList.Add(_idCounter, client);
+            var clientStream = client.GetStream();
+            
         }
 
     }

@@ -13,15 +13,12 @@ namespace Nule.Transport
     {
         protected byte[] Buffer { get; } = new byte[1024];
         
-        
         protected int ServerPort { get;  set; }
 
         protected TcpClient Client { get; set; }
 
         protected TcpListener Server { get; set; }
-        protected List<TcpClient> ClientsList { get; set; }
         
-        public bool KeepListening { get; set; } = true;
         
 
         public NetworkStates State { get; set; } = NetworkStates.Offline;
@@ -35,7 +32,7 @@ namespace Nule.Transport
         public abstract Task<bool> TryServerSend(List<TcpClient> activeClients, byte[] buffer);
         public abstract Task<bool> TryClientSend(byte[] buffer);
         public abstract Task<byte[]> ReceiveAsync();
-        public abstract Task ListenForConnectionsAsync();
+        public abstract Task<TcpClient> ListenForConnectionsAsync();
         
     }
 }
