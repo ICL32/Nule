@@ -1,8 +1,13 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Nule.NetStream;
+using Nule.Packet;
+using Nule.Transport;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,7 +24,8 @@ namespace Nule
         [SerializeField] private int _serverPort;
         [SerializeField] private SceneAsset _scene;
         [SerializeField] private GameObject _playerObject;
-
+        [SerializeField] private Vector3 _spawnPosition;
+ 
         private Transport.Transport _transport;
         private static NetworkManager _instance;
 
@@ -30,7 +36,8 @@ namespace Nule
         private uint _idCounter = 1;
         
         private List<NetworkBehaviour> _playerObjects;
-        private Dictionary<uint, TcpClient> _clientsList;
+        private Dictionary<uint, NuleClient.NuleClient> _clientsList;
+        
 
         private void Awake()
         {
@@ -41,11 +48,14 @@ namespace Nule
             }
 
             _transport = new NuleTransport.NuleTransport(_serverPort);
-            Debug.Log($"Creating TCP Client on port: :{_serverPort}");
+            Debug.Log($"Creating TCP Client on port: {_serverPort}");
             DontDestroyOnLoad(gameObject);
             Application.runInBackground = _runInBackground;
         }
 
+        private void Update()
+        {
+        }
 
         /// <summary>This method is responsible for checking there is only one instance of NetworkManager at a time</summary>
         private bool TrySingletonInitialize()
@@ -69,13 +79,27 @@ namespace Nule
             _instance = this;
             return true;
         }
+        IEnumerator LoadSceneAndInstantiate()
+        {
+            // Start loading the scene
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(_scene.name);
+
+            // Wait until the scene has finished loading
+            while (!asyncLoad.isDone)
+            {
+                yield return null;
+            }
+
+            // Instantiate the object in the loaded scene
+            Instantiate(_playerObject, _spawnPosition, Quaternion.identity);
+        }
 
         public bool TryStartHosting()
         {
             if (_transport.TryStartHosting())
             {
                 _clientId = 0;
-                SceneManager.LoadScene(_scene.name);
+                StartCoroutine(LoadSceneAndInstantiate());
                 return true;
             }
 
@@ -84,26 +108,65 @@ namespace Nule
 
         public async Task<bool> TryConnectToServer(string ipAddress)
         {
-            return await _transport.TryConnectAsync(IPAddress.Parse(ipAddress));
+            bool connected = await _transport.TryConnectAsync(IPAddress.Parse(ipAddress));
+            
+            if (connected)
+            {
+                StartCoroutine(LoadSceneAndInstantiate());
+            }
+
+            return true;
         }
 
-        public async Task TryStartListening()
+        public async Task StartListening()
         {
-            TcpClient client = await _transport.ListenForConnectionsAsync();
 
-            if (client == null)
+            while (true) // Continue accepting new clients indefinitely
+            {
+                TcpClient client = await _transport.ListenForConnectionsAsync(); // Assuming this method waits for a new client to connect
+
+                if (client != null)
+                {
+                    while (_clientsList.ContainsKey(_idCounter))
+                    {
+                        _idCounter++;
+                    }
+
+                    var nuleClient = new NuleClient.NuleClient(client);
+                    _clientsList.Add(_idCounter, nuleClient);
+                    StartCoroutine(LoadSceneAndInstantiate());
+
+                    NetworkManagerIdPacket packet = new NetworkManagerIdPacket(_idCounter);
+                    Memory<byte> packetBuffer = new byte[Marshal.SizeOf<NetworkManagerIdPacket>()];
+                    if (!Serializer.TrySerialize(ref packet, packetBuffer.Span))
+                    {
+                        throw new Exception("Failed to serialize packet.");
+                    }
+
+                    await nuleClient.ClientStream.WriteAsync(packetBuffer);
+                    
+                    
+                    // Start a new task to handle this client's communication
+                    HandleClient(nuleClient);
+                }
+            }
+        }
+        private async void HandleClient(NuleClient.NuleClient client)
+        {
+            Memory<byte> buffer = new byte[1024]; 
+            bool receivedData = await _transport.TryReceiveAsync(client.ClientStream, buffer);
+
+            if (!receivedData)
             {
                 return;
             }
+
+            Memory<byte> packetTypeBytes = buffer.Slice(0, 2);
             
-            while (_clientsList.ContainsKey(_idCounter))
-            {
-                _idCounter++;
-            }
+            PacketTypes packetType = (PacketTypes)BitConverter.ToUInt16(packetTypeBytes.Span);
+            //TODO: Handle different packet types
             
-            _clientsList.Add(_idCounter, client);
-            var clientStream = client.GetStream();
-            
+            HandleClient(client);
         }
 
     }

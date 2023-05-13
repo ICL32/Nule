@@ -115,25 +115,21 @@ namespace Nule.NuleTransport
             return true;
         }
 
-        public override async Task<byte[]> ReceiveAsync()
+        public override async Task<bool> TryReceiveAsync(NetworkStream stream, Memory<byte> buffer)
         {
             if (Client is not { Connected: true })
             {
-                return null;
+                return false;
             }
 
             try
             {
-                NetworkStream stream = Client.GetStream();
-                int bytesRead = await stream.ReadAsync(Buffer, 0, Buffer.Length);
-                byte[] result = new byte[bytesRead];
-                Array.Copy(Buffer, 0, result, 0, bytesRead);
-                return result;
+                return true; 
             }
-            catch
+            catch (Exception e)
             {
-                // You might want to log exceptions here to know what's happening
-                return null;
+                Debug.Log(e);
+                return false;
             }
         }
 

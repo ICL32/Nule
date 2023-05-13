@@ -21,7 +21,7 @@ namespace Nule.Transport
         
         
 
-        public NetworkStates State { get; set; } = NetworkStates.Offline;
+        public NetworkStates State { get; protected set; } = NetworkStates.Offline;
         
         
         
@@ -31,7 +31,7 @@ namespace Nule.Transport
         public abstract Task<bool> TryConnectAsync(IPAddress address);
         public abstract Task<bool> TryServerSend(List<TcpClient> activeClients, byte[] buffer);
         public abstract Task<bool> TryClientSend(byte[] buffer);
-        public abstract Task<byte[]> ReceiveAsync();
+        public abstract Task<bool> TryReceiveAsync(NetworkStream stream, Memory<byte> buffer);
         public abstract Task<TcpClient> ListenForConnectionsAsync();
         
     }

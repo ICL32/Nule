@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using Unity.Collections.LowLevel.Unsafe;
 
 namespace Nule.NetStream
 {
@@ -29,6 +30,15 @@ namespace Nule.NetStream
          return MemoryMarshal.TryWrite(destination, ref type);
       }
       
-      
+      public static bool TryDeserialize<T>(Span<byte> source, out T result) where T : unmanaged
+      {
+         if (source.Length < UnsafeUtility.SizeOf<T>())
+         {
+            result = default;
+            return false;
+         }
+
+         return MemoryMarshal.TryRead(source, out result);
+      }
    }
 }
