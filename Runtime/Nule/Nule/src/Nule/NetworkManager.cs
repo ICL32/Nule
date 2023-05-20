@@ -22,7 +22,6 @@ namespace Nule
         
         [SerializeField] private bool _runInBackground = true;
         [SerializeField] private int _serverPort;
-        [SerializeField] private SceneAsset _scene;
         [SerializeField] private GameObject _playerObject;
         [SerializeField] private Vector3 _spawnPosition;
  
@@ -82,7 +81,7 @@ namespace Nule
         IEnumerator LoadSceneAndInstantiate()
         {
             // Start loading the scene
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(_scene.name);
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("GameScene");
 
             // Wait until the scene has finished loading
             while (!asyncLoad.isDone)

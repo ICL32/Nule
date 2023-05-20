@@ -2,8 +2,7 @@
     "name": "Unity.Nule.CodeGen",
     "rootNamespace": "Nule.Weaver",
     "references": [
-        "GUID:de52dddd19ae83149a4aea36f92d03d1",
-        "GUID:df791bc4a81b9404f8caeef8fb699669"
+        "GUID:de52dddd19ae83149a4aea36f92d03d1"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

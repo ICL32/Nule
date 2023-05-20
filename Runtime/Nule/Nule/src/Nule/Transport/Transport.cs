@@ -19,13 +19,9 @@ namespace Nule.Transport
 
         protected TcpListener Server { get; set; }
         
-        
-
         public NetworkStates State { get; protected set; } = NetworkStates.Offline;
         
         
-        
-
         public abstract bool TryStartHosting();
         public abstract bool TryStopHosting();
         public abstract Task<bool> TryConnectAsync(IPAddress address);

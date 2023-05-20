@@ -1,3 +1,4 @@
+/*
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,3 +31,4 @@ namespace Nule.Weaver
         internal static Dictionary<int, NetworkBehaviour> NetworkObjectInstances => _networkObjectInstances;
     }
 }
+*/

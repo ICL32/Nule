@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿/*using System.IO;
 using System.Linq;
 using Mono.Cecil;
 using Nule.Weaver;
@@ -79,4 +79,4 @@ public class WeaveILPostProcessor : ILPostProcessor
             }
         }
     }
-}
+}*/

@@ -1,3 +1,4 @@
+/*
 using System.IO;
 
 
@@ -26,3 +27,4 @@ namespace Nule.Weaver
         }
     }
 }
+*/
