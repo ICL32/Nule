@@ -45,7 +45,7 @@ namespace Nule
             {
                 return;
             }
-
+            _clientsList = new Dictionary<uint, NuleClient.NuleClient>();
             _transport = new NuleTransport.NuleTransport(_serverPort);
             Debug.Log($"Creating TCP Client on port: {_serverPort}");
             DontDestroyOnLoad(gameObject);
