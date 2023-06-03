@@ -55,6 +55,35 @@ namespace Nule
         private void Update()
         {
         }
+        
+        private async void StartReceivingData()
+        {
+            while (_transport.State == NetworkStates.Connected)
+            {
+                Memory<byte> buffer = new byte[1024];
+                TcpClient client = _transport.Client;
+
+                if (client == null)
+                {
+                    
+                    break;
+                }
+
+                NetworkStream stream = client.GetStream();
+                bool receivedData = await _transport.TryReceiveAsync(stream, buffer);
+
+                if (receivedData)
+                {
+                    Debug.Log("Data was Recieved");
+                }
+                else
+                {
+                    // Handle disconnection or error
+                    // ...
+                    break;
+                }
+            }
+        }
 
         /// <summary>This method is responsible for checking there is only one instance of NetworkManager at a time</summary>
         private bool TrySingletonInitialize()
@@ -93,17 +122,18 @@ namespace Nule
             Instantiate(_playerObject, _spawnPosition, Quaternion.identity);
         }
 
-        public bool TryStartHosting()
+        public async Task TryStartHosting()
         {
-            if (_transport.TryStartHosting())
+            bool connected = _transport.TryStartHosting();
+            if (connected)
             {
                 _clientId = 0;
                 StartCoroutine(LoadSceneAndInstantiate());
-                return true;
+                await StartListening();
+                Debug.Log("Now Listening for Connections");
             }
-
-            return false;
         }
+    
 
         public async Task<bool> TryConnectToServer(string ipAddress)
         {
@@ -112,6 +142,7 @@ namespace Nule
             if (connected)
             {
                 StartCoroutine(LoadSceneAndInstantiate());
+                StartReceivingData();
             }
 
             return true;
@@ -147,6 +178,7 @@ namespace Nule
                     
                     // Start a new task to handle this client's communication
                     HandleClient(nuleClient);
+                    Debug.Log("Client Connected");
                 }
             }
         }
@@ -169,4 +201,5 @@ namespace Nule
         }
 
     }
+    
 }

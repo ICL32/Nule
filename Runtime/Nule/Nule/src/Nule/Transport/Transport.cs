@@ -15,7 +15,7 @@ namespace Nule.Transport
         
         protected int ServerPort { get;  set; }
 
-        protected TcpClient Client { get; set; }
+        protected internal TcpClient Client { get; set; }
 
         protected TcpListener Server { get; set; }
         
