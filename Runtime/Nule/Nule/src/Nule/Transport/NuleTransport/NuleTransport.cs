@@ -91,7 +91,7 @@ namespace Nule.NuleTransport
 
             try
             {
-                Server = new TcpListener(IPAddress.Parse("127.0.0.1"), ServerPort);
+                Server = new TcpListener(IPAddress.Any, ServerPort);
                 Server.Start();
                 State = NetworkStates.Hosting;
                 return true;
@@ -115,7 +115,7 @@ namespace Nule.NuleTransport
             return true;
         }
 
-        public override async Task<bool> TryReceiveAsync(NetworkStream stream, Memory<byte> buffer)
+        public override async Task<bool> TryReceiveAsync(NetworkStream stream, Memory<byte> destination)
         {
             if (Client is not { Connected: true })
             {
@@ -124,7 +124,13 @@ namespace Nule.NuleTransport
 
             try
             {
-                return true; 
+                int bytesRead = await stream.ReadAsync(destination);
+                if (bytesRead > 0)
+                {
+                    // Data was successfully read into the buffer
+                    return true;
+                }
+                return false;
             }
             catch (Exception e)
             {
