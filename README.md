@@ -1,7 +1,7 @@
 # Nule
 
 # Intro
-Nule was a network library I have been working on for a while, planning on continuing the work later. It's a low-level networking library that is integrated within Unity. The transport layer is implemented as part of the project. One of the biggest challenges in this project was getting IL weaving to work.
+Nule is a network library that provides a transport layer. IL weaving still hasn't been fully implemented as the last implementation only worked within the Unity Editor but not the Unity Player.
 
 # Transport Layer Demo
 This is a demo of what can be used with the library. Here a simple chat application is made.
